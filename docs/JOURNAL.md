@@ -24,9 +24,9 @@ Aujourd'hui, j'ai posé les fondations complètes de mon infrastructure locale e
    - J'ai activé l'IP Forwarding dans le noyau Linux et lancé Tailscale en mode `--advertise-routes=192.168.2.0/24`.
    - *Résultat* : Depuis mon Mac, en 4G, j'accède à Proxmox et à Kubernetes de façon transparente, comme si j'étais branché en RJ45 sur ma box. Pas de redirection de ports, sécurité maximale (WireGuard).
 
-4. **Crash-Test (Résilience)** :
+4. **Validation de démarrage (Post-Reboot)** :
    - J'ai configuré la VM pour démarrer automatiquement avec l'hyperviseur (`qm set 100 --onboot 1`).
-   - J'ai lancé un `reboot` brutal du serveur. Moins de 2 minutes après, le tunnel VPN était remonté et Kubernetes répondait `Ready`. Le système est totalement autonome.
+   - J'ai lancé un `reboot` gracieux du serveur pour valider que tous les services (`systemd`) étaient bien configurés au démarrage. Moins de 2 minutes après, le tunnel VPN était remonté et Kubernetes répondait `Ready`. (Note : ce n'est pas du "Chaos Engineering" brutal type `kill -9`, mais une validation basique et essentielle de la résilience du système).
 
 ### 🚧 Obstacles et Apprentissages :
 - **Oracle Cloud (Always Free)** : J'ai écrit tout le code Terraform (IaC) pour provisionner l'infrastructure réseau et calcul chez Oracle. Le réseau s'est créé en 3 secondes. Cependant, la création de l'instance Ampere (ARM) a échoué avec une erreur `500-InternalError, Out of host capacity`. Le datacenter de Montréal est physiquement saturé pour les comptes gratuits. Je mets cette partie en pause en attendant qu'Oracle libère des slots.

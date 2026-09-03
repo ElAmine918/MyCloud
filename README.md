@@ -46,6 +46,6 @@ MyCloud/
 ## 🚀 État d'avancement
 
 - [x] **Phase 1** : Déploiement hyperviseur local (Proxmox, Cloud-Init, réseau).
-- [x] **Phase 2** : Automatisation IaC cloud (Terraform OCI).
+- [ ] **Phase 2** : Automatisation IaC cloud (Terraform OCI) — *Code prêt, instance en attente de capacité ARM gratuite chez Oracle.*
 - [x] **Phase 3** : Topologie réseau Zero-Trust (Tailscale Mesh).
-- [x] **Phase 4** : Déploiement du cluster Kubernetes (K3s).
+- [x] **Phase 4** : Déploiement du Control Plane Kubernetes local (K3s).
