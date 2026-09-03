@@ -10,7 +10,7 @@
 
 Le projet **MyCloud** vise à déployer une infrastructure hybride (Local Bare-Metal + Cloud Public) documentée et maintenue selon les standards DevOps / SRE modernes :
 - **Local :** Hyperviseur Proxmox VE hébergé sur laptop physique (Toshiba).
-- **Cloud :** Ressources Always Free sur **Oracle Cloud Infrastructure (OCI)** (Ampere ARM A1, 4 vCPUs / 24 Go RAM).
+- **Cloud :** Ressources Always Free sur **Oracle Cloud Infrastructure (OCI)** (Ampere ARM A1, 2 vCPUs / 12 Go RAM, 200 Go stockage combiné).
 - **Réseau maillé (SD-WAN / Mesh) :** Connexion sécurisée inter-sites via **Tailscale / WireGuard**.
 - **Orchestration & Apps :** Cluster Kubernetes léger (**K3s**) multi-nœuds, observabilité (**Prometheus & Grafana**), lab pentest isolé (VLAN Kali/DVWA).
 - **Principes fondamentaux :** 100 % Infrastructure as Code (Terraform), Gestion de Configuration (Ansible), GitOps, et zéro fuite de secrets.
@@ -81,9 +81,9 @@ MyCloud/
 
 - **Compte :** Compte Oracle Cloud Always Free créé.
 - **Ressources cibles à provisionner :**
-  - Architecture ARM Ampere A1 (jusqu'à 4 OCPUs, 24 Go RAM gratuits à vie).
+  - Architecture ARM Ampere A1 (2 OCPUs, 12 Go RAM permanent - 1 500 h OCPU & 9 000 Go-h/mois).
   - VCN (Virtual Cloud Network), sous-réseau public, Internet Gateway, Security Lists.
-- **Statut d'intégration :** En attente de création des clés API OCI et de l'initialisation du provider Terraform.
+- **Statut d'intégration :** Code Terraform initialisé et plan validé (`Plan: 6 to add`).
 
 ---
 
@@ -97,6 +97,8 @@ MyCloud/
 | **Gestion des VMs** | Cloud-Init au lieu de ISO manuelles | Reproductibilité DevOps, instanciation en 10 secondes, injection automatique de clés SSH et IP. |
 | **Réseau Hybride** | Tailscale (WireGuard mesh) | Pas besoin d'ouvrir des ports sur la box Internet résidentielle, gestion automatique NAT traversal. |
 | **Stockage K8s** | `local-path-provisioner` | Pas de réplication de stockage synchrone (comme Ceph/Longhorn) à travers Internet en raison de la latence WAN. |
+| **Quota OCI Always Free** | Dimensionnement strict à 2 OCPUs / 12 Go RAM | Alignement avec la politique OCI actuelle (1 500 h OCPU & 9 000 Go-h/mois) garantissant un coût de 0,00 $. |
+| **Politique Idle OCI** | Workload actif K3s + monitoring node-exporter | Évite la réclamation automatique d'instance inactive par Oracle (règle des 7 jours sous les 20 % d'utilisation). |
 
 ---
 
@@ -111,7 +113,7 @@ Cloud-Init Template             OCI API Keys Setup            Join K3s Nodes
     (Ubuntu/Debian)                     │                            │
         │                               ▼                            ▼
         ▼                        Terraform OCI Apply          Prometheus / Grafana
-2x VMs Locales (K3s)           (Ampere A1 4 OCPU/24GB)        (Local storage pinned)
+2x VMs Locales (K3s)          (Ampere A1 2 OCPUs/12GB)        (Local storage pinned)
 ```
 
 ### Action Immédiate #1 : Création du Template Cloud-Init Proxmox (Local)

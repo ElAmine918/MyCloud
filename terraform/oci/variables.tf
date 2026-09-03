@@ -37,13 +37,13 @@ variable "ssh_public_key_path" {
 }
 
 variable "instance_ocpus" {
-  description = "Nombre d'OCPUs ARM Ampere A1 (Always Free autorise jusqu'à 4 OCPUs au total)"
+  description = "Nombre d'OCPUs ARM Ampere A1 (Always Free autorise jusqu'à 2 OCPUs permanents, soit 1 500 h/mois)"
   type        = number
   default     = 2
 }
 
 variable "instance_memory_in_gbs" {
-  description = "Quantité de mémoire vive en Go (Always Free autorise jusqu'à 24 Go au total)"
+  description = "Quantité de mémoire vive en Go (Always Free autorise jusqu'à 12 Go permanents, soit 9 000 Go-h/mois)"
   type        = number
   default     = 12
 }

@@ -43,7 +43,7 @@ Tout ce qui tourne sur les comptes cloud, provisionné en code plutôt qu'à la 
 
 ### Comptes à créer
 
-- **Oracle Cloud Always Free** — 4 vCPU ARM Ampere \+ 24GB RAM à vie  
+- **Oracle Cloud Always Free** — 2 vCPU ARM Ampere \+ 12GB RAM permanent (1 500 h OCPU & 9 000 Go-h/mois)  
 - **AWS Free Tier** — 12 mois EC2/S3/Lambda/IAM/VPC  
 - (optionnel) Azure Free Account, Google Cloud Free Tier
 

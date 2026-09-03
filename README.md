@@ -58,7 +58,7 @@ MyCloud/
 ## 🚀 Phases de Déploiement
 
 - [x] **Phase 1 : Fondation Proxmox** (Bare-metal PVE 9, sources no-subscription, lid switch, Cloud-Init templates)
-- [ ] **Phase 2 : Infrastructure as Code** (Terraform OCI Always Free Ampere A1 4 OCPU / 24 GB)
+- [ ] **Phase 2 : Infrastructure as Code** (Terraform OCI Always Free Ampere A1 2 OCPUs / 12 GB RAM)
 - [ ] **Phase 3 : Configuration Management** (Ansible hardening, packages, configuration système)
 - [ ] **Phase 4 : Réseau Mesh Hybride** (Tailscale mesh VPN entre Toshiba et Oracle Cloud)
 - [ ] **Phase 5 : CI/CD & DevSecOps** (GitHub Actions + Checkov/tfsec)
