@@ -1,67 +1,46 @@
-# ☁️ MyCloud — Homelab & Multi-Cloud Hybrid Infrastructure
+# ☁️ MyCloud — Mon Lab DevOps & Cloud (Projet Étudiant)
 
-Portfolio d'infrastructure hybride combinant virtualisation bare-metal locale (Proxmox VE sur Toshiba) et cloud public permanent (Oracle Cloud Always Free & AWS), orchestré comme du code (IaC, GitOps, CI/CD).
+Salut ! 👋 Bienvenue sur mon portfolio d'infrastructure. 
 
----
-
-## 🏛️ Architecture Globale
-
-```
-                      +------------------------------------------+
-                      |         GitHub (CI/CD & GitOps)          |
-                      |   - GitHub Actions (Terraform / Ansible) |
-                      |   - DevSecOps (Checkov / tfsec)          |
-                      +------------------------------------------+
-                                    |                |
-                (WireGuard mesh via Tailscale)       |
-                                    |                |
-           +------------------------+                +------------------------+
-           |                                                                  |
-           v                                                                  v
-+-----------------------------+                           +-----------------------------+
-|    🏢 LOCAL (Bare Metal)    |                           |      ☁️ CLOUD (Public)       |
-|  Toshiba Laptop (PVE 9.x)   |                           |    Oracle Cloud Always Free |
-+-----------------------------+                           +-----------------------------+
-| • K3s Local Control/Worker  | <======= Mesh VPN ======> | • K3s Cloud Worker (Ampere) |
-| • Prometheus & Grafana      |      (Tailscale / MTU     | • Public Ingress / Cloudflare|
-| • local-path-provisioner    |        optimisé)          | • Terraform Provisioned     |
-| • Réseau Pentest isolé      |                           |                             |
-|   (Kali + Target VMs)       |                           |                             |
-+-----------------------------+                           +-----------------------------+
-```
+Ce projet est mon "Homelab" hybride. Mon objectif est d'apprendre par la pratique le métier d'ingénieur DevOps / SRE en montant une architecture de A à Z. Je combine un vieux PC portable Toshiba chez moi avec des instances gratuites dans le Cloud. 
 
 ---
 
-## 📂 Structure du Répertoire
+## 🛠️ Mon approche
+
+Plutôt que d'utiliser des interfaces cliquables, j'essaie de tout coder (*Infrastructure as Code*) et de documenter mes galères et mes apprentissages.
+
+### Ce que j'ai mis en place :
+
+1. **Bare-Metal (Le Toshiba)** 💻 : 
+   - J'ai installé l'hyperviseur Proxmox directement sur le disque dur.
+   - J'ai optimisé le noyau Linux pour ignorer la fermeture du capot et j'ai créé mes propres "Templates" Ubuntu avec Cloud-Init pour automatiser la création de mes serveurs virtuels.
+   - Upgrade matériel : allocation fine du CPU et de la RAM (16 Go) aux VMs.
+
+2. **Orchestration (Kubernetes / K3s)** ☸️ :
+   - J'ai installé mon propre cluster Kubernetes (K3s). 
+   - J'ai piloté l'installation de mes pods (Traefik, CoreDNS) et je contrôle mon cluster depuis mon Mac perso via `kubectl`.
+
+3. **Cloud Public (Oracle / AWS)** ☁️ :
+   - J'utilise **Terraform** pour scripter mes serveurs Cloud gratuits (Oracle Ampere A1).
+   - J'ai appris à gérer les quotas, les limites de capacité (ex: le pool ARM de Montréal 🇨🇦) et les règles de pare-feu réseau.
+
+4. **Réseau Mesh (Tailscale)** 🕸️ :
+   - J'ai configuré un routeur virtuel Tailscale (WireGuard) directement sur Proxmox. 
+   - Résultat : Je me connecte en 4G ou depuis n'importe quel Wi-Fi, et j'ai accès à tous mes serveurs internes de manière sécurisée sans ouvrir de port sur ma box internet !
+
+---
+
+## 📂 Organisation du code
 
 ```text
 MyCloud/
-├── terraform/               # Infrastructure as Code (IaC)
-│   ├── oci/                 # Ressources Oracle Cloud (Instances Ampere, VCN, Security Lists)
-│   ├── aws/                 # Pratique AWS Free Tier (VPC, IAM, S3, Lambda)
-│   └── modules/             # Modules Terraform réutilisables
-├── ansible/                 # Gestion de configuration & durcissement
-│   ├── inventories/         # Inventaires local / cloud / hybrid
-│   ├── playbooks/           # Playbooks de configuration et durcissement OS
-│   └── roles/               # Rôles Ansible (k3s, tailscale, docker, base)
-├── k8s/                     # Manifests Kubernetes & Helm Charts
-│   ├── base/                # Déploiements de base du cluster
-│   └── apps/                # Monitoring (Prometheus/Grafana), Ingress, Services
-├── docs/                    # Documentation technique & Décisions d'architecture (ADR)
-│   ├── architecture/        # Schémas et explications de conception
-│   └── runbooks/            # Guides opérationnels et dépannage
-└── .github/workflows/       # Pipelines CI/CD pour validation IaC et déploiements
+├── terraform/       # Le code qui crée les serveurs (Oracle, et AWS pour la suite)
+├── k8s/             # Tous mes manifestes Kubernetes pour déployer mes apps
+├── ansible/         # Pour installer automatiquement les logiciels dans les VMs
+├── docs/            # Mon carnet de bord : ce que j'ai appris, mes tests et solutions
+└── .github/         # L'automatisation CI/CD (GitHub Actions)
 ```
 
----
-
-## 🚀 Phases de Déploiement
-
-- [x] **Phase 1 : Fondation Proxmox** (Bare-metal PVE 9, sources no-subscription, lid switch, Cloud-Init templates)
-- [ ] **Phase 2 : Infrastructure as Code** (Terraform OCI Always Free Ampere A1 2 OCPUs / 12 GB RAM)
-- [ ] **Phase 3 : Configuration Management** (Ansible hardening, packages, configuration système)
-- [ ] **Phase 4 : Réseau Mesh Hybride** (Tailscale mesh VPN entre Toshiba et Oracle Cloud)
-- [ ] **Phase 5 : CI/CD & DevSecOps** (GitHub Actions + Checkov/tfsec)
-- [ ] **Phase 6 : Monitoring & Observabilité** (Prometheus & Grafana avec stockage local-path)
-- [ ] **Phase 7 : Lab Cybersécurité / Pentest** (VLAN/bridge isolé, Kali, DVWA)
-- [ ] **Phase 8 : Architecture Decision Records (ADR) & Portfolio**
+## 📝 Carnet de bord
+Tu peux lire l'évolution de mon projet, mes choix techniques (et mes erreurs réparées) dans le dossier `docs/JOURNAL.md`.
